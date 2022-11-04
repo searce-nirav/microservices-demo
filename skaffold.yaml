@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-apiVersion: skaffold/v3
+apiVersion: skaffold/v2beta17
 kind: Config
 metadata:
   name: app
@@ -48,10 +48,11 @@ build:
     gitCommit: {}
   local:
     useBuildkit: false
-manifests:
-  - "./kubernetes-manifests/*.yaml"
+
 deploy:
-  kubectl: {}
+  kubectl:
+    manifests:
+    - ./kubernetes-manifests/*.yaml
 # "gcb" profile allows building and pushing the images
 # on Google Container Builder without requiring docker
 # installed on the developer machine. However, note that
@@ -65,7 +66,7 @@ profiles:
   build:
     googleCloudBuild:
       diskSizeGb: 300
-      machineType: N1_HIGHCPU_32
+      machineType: e2-standard-32
       timeout: 4000s
 # "debug" profile replaces the default Dockerfile in cartservice with Dockerfile.debug, 
 # which enables debugging via skaffold.
